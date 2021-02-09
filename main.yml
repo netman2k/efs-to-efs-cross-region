@@ -7,18 +7,18 @@ Parameters:
   SrcEFS:
     Description: Source EFS Id
     Type: String
-  
+
   DstEFS:
     Description: Destination EFS Id
     Type: String
-  
+
   SrcEFSPrivateIp:
     Description: Source EFS Private IP with suffix. Example 10.0.0.1:/
     Type: String
-  
+
   DstEFSPrivateIp:
     Description: Destination EFS Private IP with suffix. Example 10.0.0.2:/
-    Type: String  
+    Type: String
 
   # Interval tag for your backups; daily, weekly, monthly
   IntervalTag:
@@ -106,7 +106,7 @@ Parameters:
       - "Yes"
       - "No"
     Default: "Yes"
-  
+
 Metadata:
   AWS::CloudFormation::Interface:
     ParameterGroups:
@@ -144,7 +144,7 @@ Metadata:
       SrcEFSPrivateIp:
         default: Source EFS Private IP
       DstEFSPrivateIp:
-        default: Destination EFS Private IP    
+        default: Destination EFS Private IP
       FolderLabel:
         default: Folder Label
       BackupWindow:
@@ -156,7 +156,7 @@ Metadata:
       VpcId:
         default: VPC ID
       EFSEncryption:
-        default: EFS Encryption    
+        default: EFS Encryption
 
 Mappings:
   Map:
@@ -227,14 +227,14 @@ Resources:
            # sudo yum install amazon-ssm-agent -y
            sudo yum install -y https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm
            sudo start amazon-ssm-agent
-           
+
            # SIM:V4488716 - 08/03/2018 - Support custom DHCP option
            # https://github.com/awslabs/efs-backup/issues/1
            cat <<EOT | sudo tee /etc/resolv.conf
            search amazonaws.com
            nameserver 169.254.169.253
            EOT
-           
+
            curl --connect-timeout 5 --speed-time 5 --retry 10  --retry-delay 5 https://s3.amazonaws.com/backup-utility-script/efs-backup-fpsync-m.sh -o /home/ec2-user/efs-backup-fpsync.sh
 
            chmod a+x /home/ec2-user/efs-backup-fpsync.sh
@@ -308,7 +308,7 @@ Resources:
         KeySchema:
           - AttributeName: BackupId
             KeyType: HASH
-        # 12/28/2018 - EFS-21432 - DynamoDB on-demand capacity    
+        # 12/28/2018 - EFS-21432 - DynamoDB on-demand capacity
         BillingMode: PAY_PER_REQUEST
         TimeToLiveSpecification:
           AttributeName: ExpireItem
@@ -560,7 +560,7 @@ Resources:
         S3Bucket: !Sub solutions-${AWS::Region}
         S3Key: efs-backup/v1.3.1/amilookup.zip
       Handler: amilookup.handler
-      Runtime: nodejs8.10
+      Runtime: nodejs12.x
       Timeout: 120
       Description: EFS Backup - This function is CloudFormation custom lambda resource that
          looks up the latest AMI ID.
